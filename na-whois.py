@@ -17,10 +17,11 @@ def get_whois(domain_or_ip):
 @app.route('/')
 def index():
     """view for user"""
-    return render_template('main.html')
+    test_whois = get_whois('le087.ru')
+    return render_template('main.html', test_whois)
 
-
-
+if __name__ == "__main__":
+    app.run(debug=True)
 
 
         
