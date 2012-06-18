@@ -1,27 +1,37 @@
 # -*- coding: utf-8 -*-
-import os
-import sys
-from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
+
+import re
+import subprocess
+from flask import Flask, request, render_template
 
 app = Flask(__name__)
 app.config.from_object(__name__)
 
 def get_whois(domain_or_ip):
     """get whois information of domain or ip"""
-    return os.system('whois %s' % domain_or_ip)
+    return  subprocess.Popen(["whois", domain_or_ip], stdout=subprocess.PIPE).communicate()[0]
 
+def testing_input(test_input):
+    test_output = ''
+    re_expression = re.compile('[0-9a-zA-Z\.\-]')
+    re_expression2 = re.compile(u'[А-Яа-я]')    
+    for i in test_input:
+        if re_expression.findall(i):
+            test_output = test_output + i
+        if re_expression2.findall(i):
+            test_output = test_output + i
+    return test_output
+        
 @app.route('/', methods=['POST', 'GET'])
 def index():
     """view for user"""
-    if request.method == 'POST':
-        if request.form['username']:
-            test = 'Информация Whois домена или IP-адреса.'.decode('utf-8')
-            test2 = get_whois(request.form['username'])
-            return render_template('main.html', test=test, test2=test2)
+    if request.method == 'POST' and request.form['domain']:
+        search_domain = testing_input(request.form['domain'])
+        info_whois = get_whois(search_domain).decode("utf-8")
+        info_whois_template = info_whois.split("\n")
+        return render_template('main.html', info_whois=info_whois_template, input_domain=search_domain)
     else:
-        test = 'Информация Whois домена или IP-адреса.'.decode('utf-8')
-        test2 = 'Пустота'.decode('utf-8')
-        return render_template('main.html', test=test, test2=test2)
+        return render_template('main.html', info_whois="")
 
 if __name__ == "__main__":
     app.run(debug=True)
