@@ -1,15 +1,20 @@
 <!doctype html>
 <title>whois</title>
-<h1>super whois NA</h1>
+<h1>super whois NA =)</h1>
 <p>Проверка информации о домене или ip-адресе.</p>
-  <form action="" method=post>
+  <form action="" method=get>
     <dl>
       <dt>Введите домен:
       <dd><input type=text name=domain>
       <dd><input type=submit value=whois>
     </dl>
   </form>
-  Для домена {{ input_domain }} найдено следующее: <br>
-  {% for i in info_whois %} 
-  <br> {{ i }} 
-  {% endfor %} 
+  {% if input_domain %}
+     Для домена {{ input_domain }} найдено следующее: <br>
+     {% for i in info_whois %} 
+        <br> {{ i }} 
+     {% endfor %} 
+  {% endif %}
+  {% if novalid %}
+	{{ novalid }}
+  {% endif %}

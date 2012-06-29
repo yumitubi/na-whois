@@ -12,24 +12,30 @@ def get_whois(domain_or_ip):
     return  subprocess.Popen(["whois", domain_or_ip], stdout=subprocess.PIPE).communicate()[0]
 
 def testing_input(test_input):
-    test_output = ''
-    re_expression = re.compile('[0-9a-zA-Z\.\-]')
-    re_expression2 = re.compile(u'[А-Яа-я]')    
-    for i in test_input:
-        if re_expression.findall(i):
-            test_output = test_output + i
-        if re_expression2.findall(i):
-            test_output = test_output + i
-    return test_output
+    """test and split input user"""
+    test_input_obr = test_input.strip()
+    if re.compile(u'^http://').match(test_input_obr):
+        test_input_obr = test_input_obr.replace('http://', '')
+    if re.compile(u'^www\.').match(test_input_obr):
+        test_input_obr = test_input_obr.replace('www.', '')
+    if re.compile(u'^[а-яёА-ЯЁa-zA-Z0-9\-\.]+$').match(test_input_obr):
+        return test_input_obr
+    else:
+        return False
         
-@app.route('/', methods=['POST', 'GET'])
+@app.route('/', methods=['GET'])
 def index():
     """view for user"""
-    if request.method == 'POST' and request.form['domain']:
-        search_domain = testing_input(request.form['domain'])
-        info_whois = get_whois(search_domain).decode("utf-8")
-        info_whois_template = info_whois.split("\n")
-        return render_template('main.html', info_whois=info_whois_template, input_domain=search_domain)
+    if request.args.get('domain', ''):
+        search_domain = testing_input(request.args.get('domain', ''))
+        if search_domain:
+            info_whois = get_whois(search_domain).decode("utf-8")
+            info_whois_template = info_whois.split("\n")
+            return render_template('main.html', info_whois=info_whois_template, 
+                                   input_domain=search_domain,
+                                   novalid=False)
+        else:
+            return render_template('main.html', novalid='Вы ввели неправильное имя домена, пожалуйста, попробуйте снова'.decode("utf-8"))
     else:
         return render_template('main.html', info_whois="")
 
