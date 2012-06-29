@@ -14,7 +14,7 @@ def get_whois(domain_or_ip):
 def testing_input(test_input):
     """test and split input user"""
     test_input_obr = test_input.strip()
-    if re.compile(u'^http://').match(test_input_obr):
+    if re.compile(u'^http:\/\/').match(test_input_obr):
         test_input_obr = test_input_obr.replace('http://', '')
     if re.compile(u'^www\.').match(test_input_obr):
         test_input_obr = test_input_obr.replace('www.', '')
@@ -35,7 +35,7 @@ def index():
                                    input_domain=search_domain,
                                    novalid=False)
         else:
-            return render_template('main.html', novalid='Вы ввели неправильное имя домена, пожалуйста, попробуйте снова'.decode("utf-8"))
+            return render_template('main.html', novalid='Вы ввели неправильное имя домена или неверный IP-адрес, пожалуйста, попробуйте снова'.decode("utf-8"))
     else:
         return render_template('main.html', info_whois="")
 

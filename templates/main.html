@@ -4,13 +4,14 @@
 <p>Проверка информации о домене или ip-адресе.</p>
   <form action="" method=get>
     <dl>
-      <dt>Введите домен:
+      <dt>Введите домен или IP-адрес:
       <dd><input type=text name=domain>
       <dd><input type=submit value=whois>
     </dl>
   </form>
   {% if input_domain %}
-     Для домена {{ input_domain }} найдено следующее: <br>
+     По Вашему запросу найдено следующее: <br><br>
+     <strong>{{ input_domain }}</strong><br><br>
      {% for i in info_whois %} 
         <br> {{ i }} 
      {% endfor %} 
