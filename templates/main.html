@@ -1,21 +1,33 @@
-<!doctype html>
-<title>whois</title>
-<h1>super whois NA =)</h1>
-<p>Проверка информации о домене или ip-адресе.</p>
-  <form action="" method=get>
-    <dl>
-      <dt>Введите домен или IP-адрес:
-      <dd><input type=text name=domain>
-      <dd><input type=submit value=whois>
-    </dl>
-  </form>
+<!DOCTYPE html>
+<head>
+  <title>whois</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"  />
+  <link rel="stylesheet" type="text/css" href="/static/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="/static/prettify.css" />
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>
+  <script>window.jQuery || document.write('<script src="{{ url_for('static', filename='jquery.js') }}">\x3C/script>')</script>
+  <script>
+    $(function(){$("input:first").focus()})
+  </script>
+</head>
+<body>
+  <div class="container">
+    <form class="well" action="" method="GET">
+      <h2>Введите домен или IP-адрес:</h2>
+      <div class="input-append">
+        <input type="text" class="span10" name="what" /><button class="btn btn-info" type="submit">Проверить</button>
+      </div>
+    </form>
   {% if input_domain %}
-     По Вашему запросу найдено следующее: <br><br>
-     <strong>{{ input_domain }}</strong><br><br>
-     {% for i in info_whois %} 
-        <br> {{ i }} 
-     {% endfor %} 
+     <h3>По Вашему запросу <strong>«{{ input_domain }}»</strong> найдено следующее: </h3>
+     <div class="prettyprint">
+       {% for i in info_whois %}
+        <br> {{ i }}
+       {% endfor %}
+     </div>
   {% endif %}
   {% if novalid %}
-	{{ novalid }}
+        {{ novalid }}
   {% endif %}
+  </div>
+</body>
