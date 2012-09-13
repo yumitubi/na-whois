@@ -48,11 +48,11 @@ def index():
                                    input_domain=search_domain, novalid=False)
         else:
             return render_template(
-                'main.html', input_domain=False,
+                'main.html', input_domain=domain,
                 novalid=u"Вы ввели неправильное имя домена"
                     u" или неверный IP-адрес, пожалуйста, попробуйте снова")
     else:
-        return render_template('main.html', input_domain=False, info_whois=None)
+        return render_template('main.html', input_domain="", info_whois=None)
 
 if __name__ == "__main__":
     app.run(debug=True, host="127.0.0.1", port=5010)

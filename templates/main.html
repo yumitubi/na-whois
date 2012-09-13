@@ -15,7 +15,7 @@
     <form class="well" action="" method="GET">
       <h2>Введите домен или IP-адрес:</h2>
       <div class="input-append">
-        <input type="text" class="span10" name="what" /><button class="btn btn-info" type="submit">Проверить</button>
+        <input type="text" class="span10" name="what" value="{{ input_domain }}" /><button class="btn btn-info" type="submit">Проверить</button>
       </div>
     </form>
   {% if input_domain %}
