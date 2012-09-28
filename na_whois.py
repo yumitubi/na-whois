@@ -12,8 +12,12 @@ cache = MemcachedCache([MEMCACHE_IP])
 
 def get_whois(domain_or_ip):
     """get whois information of domain or ip"""
-    return  subprocess.Popen(["whois", "-H", domain_or_ip], stdout=subprocess.PIPE).communicate()[0]
-
+    info = subprocess.Popen(["whois", "-H", domain_or_ip], stdout=subprocess.PIPE).communicate()[0]
+    try:
+        info_out = info.decode("utf8")
+    except:
+        info_out = info.decode("cp1251")
+    return info_out
 
 def input_testing(test_input):
     """test and split input user"""
@@ -41,7 +45,7 @@ def index():
         if search_domain:
             info_whois = cache.get(u'%s_info_whois' % search_domain)
             if not info_whois:
-                info_whois = get_whois(search_domain).decode("utf-8")
+                info_whois = get_whois(search_domain)
                 cache.set(u'%s_info_whois' % search_domain, info_whois, timeout=60 * 15)
             info_whois_template = info_whois.split("\n")
             return render_template('main.html', info_whois=info_whois_template,
