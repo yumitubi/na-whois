@@ -13,11 +13,7 @@ cache = MemcachedCache([MEMCACHE_IP])
 def get_whois(domain_or_ip):
     """get whois information of domain or ip"""
     info = subprocess.Popen(["whois", "-H", domain_or_ip], stdout=subprocess.PIPE).communicate()[0]
-    try:
-        info_out = info.decode("utf8")
-    except:
-        info_out = info.decode("cp1251")
-    return info_out
+    return info.decode("utf8", "replace")
 
 def input_testing(test_input):
     """test and split input user"""
